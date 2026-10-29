@@ -1,0 +1,25 @@
+{
+  "expo": {
+    "name": "Track",
+    "slug": "simplify-track",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "backgroundColor": "#f7f8f6"
+    },
+    "android": {
+      "package": "in.simplifymoney.track",
+      "versionCode": 1,
+      "usesCleartextTraffic": true
+    },
+    "ios": {
+      "bundleIdentifier": "in.simplifymoney.track"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "3219b6b0-1262-4c7a-b009-614bc68ac6f4"
+      }
+    }
+  }
+}
