@@ -11,7 +11,11 @@ Requirements: Node 20+, Android Studio with an emulator (or an Android phone), a
 3. In a second terminal at this project root, run `npm install` then `npm run android`.
 4. If using a physical Android phone, copy `.env.example` to `.env`, set `EXPO_PUBLIC_API_URL` to your computer's LAN IP on port 4010, then run `npm start` and open the project in Expo Go. iOS simulator uses `http://localhost:4010`.
 
-The Android emulator default is `http://10.0.2.2:4010`. Keep the API process running while using the app. Commands: `npm run typecheck`, `npm test`.
+The Android emulator default is `http://10.0.2.2:4010`; the browser defaults to `http://localhost:4010`. Keep the API process running while using the app. Commands: `npm run typecheck`, `npm test`.
+
+## Browser version
+
+This project uses the same React Native screen in the browser through React Native Web. Start the mock server in one terminal, then run `npm run web` from the project root and open the local URL printed by Expo. For a static browser export, run `npm run export:web`; the output is written to `dist`. A hosted website and API require public hosting. The assignment asks for an Android build, so include the APK as well if submitting the website as an extra preview.
 
 ## Android build link
 
@@ -20,10 +24,10 @@ An EAS preview profile is included in `eas.json` and produces an installable APK
 ```sh
 npx eas-cli login
 npx eas-cli build:configure
-npx eas-cli build --platform android --profile preview
+npx eas-cli build --platform android --profile preview --clear-cache
 ```
 
-When the build finishes, copy the install URL from the EAS build page into the assignment email. The preview profile is for internal distribution and builds an APK. Set `EXPO_PUBLIC_API_URL` to a server reachable from the Android device before building if the reviewer will not use an Android emulator. See [Expo's APK build guide](https://docs.expo.dev/build-reference/apk/) and [internal distribution guide](https://docs.expo.dev/build/internal-distribution/).
+Before building for a physical phone on the same Wi-Fi, set the EAS `preview` environment variable `EXPO_PUBLIC_API_URL` to the computer's LAN address and keep the mock server running. `--clear-cache` is needed when changing this value so the Android JS bundle picks up the updated endpoint. When the build finishes, copy the install URL from the EAS build page into the assignment email. This LAN URL is only reachable on that network; use a publicly hosted API for reviewers on other networks. See [Expo's APK build guide](https://docs.expo.dev/build-reference/apk/) and [internal distribution guide](https://docs.expo.dev/build/internal-distribution/).
 
 ## Behavior
 
@@ -85,5 +89,5 @@ OpenAI Codex helped scaffold and implement the app and tests. I checked its init
 
 - Fixture audit was run against the supplied transaction, changes, and checkpoint files. The 4,686 ID count and each checkpoint total match using the implementation's rules.
 - `npm test`: 12 passed, including final fixture reconciliation. `npm run typecheck`: passed. `npx expo export --platform android --output-dir dist`: Android bundle exported successfully. The mock server's `/v1/health` returned 200.
-- No physical-device run, TalkBack pass, before/after performance measurements, APK, or walkthrough recording has been done. `eas.json` is configured for an internal APK build; it needs a signed-in Expo account to produce its share link.
-- Task 0, Task 1, updated CV, public repo publication, and submission email remain for the candidate.
+- An EAS Android APK was built and installed on a physical phone, but transaction sync still showed Offline. The phone browser could reach the mock API health endpoint; the app itself made no requests to that server in the observed retry. The preview build is configured to use the EAS `preview` environment. A clean-cache rebuild is needed before treating the APK as working.
+- Task 0 and the real-app walkthrough required for Task 1 are not complete. TalkBack checks, before/after performance measurements, walkthrough recording, updated CV, public repo publication, and submission email also remain for the candidate.

@@ -1,9 +1,13 @@
 import { Account, Page, StoredState, Transaction } from './types';
 import { normalizeTransaction } from './normalize';
+import { Platform } from 'react-native';
 
 declare const process: { env: { EXPO_PUBLIC_API_URL?: string } };
 export const emptyState: StoredState = { transactions: [], accounts: [], syncToken: null, lastSyncedAt: null, hasSynced: false };
-export const API_URL = process.env.EXPO_PUBLIC_API_URL ?? 'http://10.0.2.2:4010';
+const configuredApiUrl = process.env.EXPO_PUBLIC_API_URL;
+export const API_URL = Platform.OS === 'web' && (!configuredApiUrl || configuredApiUrl === 'http://10.0.2.2:4010')
+  ? 'http://localhost:4010'
+  : configuredApiUrl ?? 'http://10.0.2.2:4010';
 
 class ApiError extends Error { constructor(public status: number) { super(`Server returned ${status}`); } }
 const wait = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
